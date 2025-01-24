@@ -15,10 +15,10 @@ class ArrayList{
         const lengths = this.#length_of_elements;
         this.#status[lengths] = element; 
         Object.defineProperty(this, lengths,  {
-            get: function(){
+            get: ()=>{
                 return this.#status[lengths];
             },
-            set: function(uj_ertek){
+            set: (uj_ertek)=>{
                 this.#status[lengths] = uj_ertek;
             },
             
@@ -66,3 +66,39 @@ console.log(tomblista.Contains(masodikobj));
 
 tomblista.Clear();
 console.log(tomblista);
+
+class ArrayHTMLElement extends HTMLElement{
+    #tbody
+    constructor(){
+        super();
+    }
+    connectedCallback(){
+        const table = document.createElement("table");
+        this.appendChild(table)
+        const thead = document.createElement("thead");
+        table.appendChild(thead)
+        this.#tbody = document.createElement("tbody");
+        table.appendChild(this.#tbody)
+    }
+    /**
+     * 
+     * @param {{nev:string, eletkor:number}} item 
+     */
+    addPersonRow(item){
+        const row = document.createElement("tr");
+        this.#tbody.appendChild(row);
+        
+        const td1 = document.createElement("td");
+        td1.innerHTML = item.nev;
+        row.appendChild(td1);
+
+        const td2 = document.createElement("td");
+        td2.innerHTML = item.eletkor;
+        row.appendChild(td2);
+    }
+}
+
+customElements.define('array-table', ArrayHTMLElement);
+const arrayTable = new ArrayHTMLElement; // ez lehet baj
+document.body.appendChild(arrayTable);
+arrayTable.addPersonRow({nev:"Kristof", eletkor: 10})
