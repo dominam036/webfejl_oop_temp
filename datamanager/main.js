@@ -58,6 +58,31 @@ class DataManager{
         }
         this.#updateCallback(nameArray);
     }
+    /**
+     * 
+     * @param {function(Person):boolean} filterCB 
+     */
+    filter(filterCB){
+        const filterArray = [];
+        for(const elem of this.#array){
+            if(filterCB(elem)){
+                filterArray.push(elem);
+            }
+        }
+        this.#updateCallback(filterArray);  
+    }
+    orderByAge(){
+        const orderArray = [];
+        for(let i = 0; i < this.#array.length; i++){
+            orderArray[i] = this.#array[i]
+        }
+        for(let i = 0; i < orderArray.length; i++){
+            orderArray[i] = orderArray[i]
+        }
+    }
+    orderByName(){
+
+    }
 }
 
 class DataTable{
@@ -88,6 +113,7 @@ class DataTable{
                 td2.innerHTML = person.Age
                 row.appendChild(td2);
             }
+            console.log(persons)
         })
     }
 }
@@ -101,3 +127,27 @@ input.addEventListener("input", (e)=>{
     filterAge(e.currentTarget.value)
     filterName(e.currentTarget.value)
 })
+
+const input2 = document.createElement("input");
+document.body.appendChild(input2);
+input2.type = 'file';
+input2.addEventListener("change", (e)=>{
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsText(file);
+    reader.onload = (e)=>{
+        const filecontent = reader.result;
+        const split = filecontent.split("\n");
+        for(const elem of split){
+            const small = elem.split(";")
+            const pers = {
+                Name:small[0], 
+                Age:Number(small[1])
+            }
+            dataManager.add(pers);
+        }
+        console.log(split);
+        dataManager.filter((person)=>{return person.Name.includes("C")});
+        dataManager.orderByAge();
+    }
+});
